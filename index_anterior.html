@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tabla Periódica Interactiva - Ingeniería Industrial</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#0f172a;
+    color:white;
+}
+
+/* ENCABEZADO */
+
+header{
+    text-align:center;
+    padding:30px 20px;
+    background:linear-gradient(135deg,#1e3a8a,#2563eb);
+}
+
+header h1{
+    margin:0;
+    font-size:40px;
+}
+
+header p{
+    margin:10px 0;
+    color:#dbeafe;
+}
+
+/* CONTROLES */
+
+.controles{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+input,
+select,
+button{
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    font-size:15px;
+}
+
+input{
+    width:300px;
+}
+
+button{
+    background:#f59e0b;
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    background:#d97706;
+}
+
+/* INFORMACIÓN */
+
+#contador{
+    margin-top:15px;
+    font-weight:bold;
+}
+
+/* TABLA */
+
+.contenedor-tabla{
+    overflow-x:auto;
+    padding:25px;
+}
+
+.tabla{
+    display:grid;
+    grid-template-columns:repeat(18,70px);
+    grid-auto-rows:90px;
+    gap:5px;
+    justify-content:center;
+    min-width:1300px;
+}
+
+.sin-resultados{
+    grid-column:1 / -1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:180px;
+    background:rgba(148, 163, 184, 0.12);
+    border:1px dashed rgba(255,255,255,0.35);
+    border-radius:12px;
+    color:#dbeafe;
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;
+    padding:20px;
+}
+
+/* ELEMENTOS */
+
+.elemento{
+    border-radius:8px;
+    padding:5px;
+    text-align:center;
+    cursor:pointer;
+    color:white;
+    transition:0.2s;
+    border:2px solid rgba(255,255,255,0.5);
+}
+
+.elemento:hover{
+    transform:scale(1.08);
+    box-shadow:0 8px 20px rgba(0,0,0,0.5);
+    z-index:5;
+}
+
+.numero{
+    text-align:left;
+    font-size:11px;
+}
+
+.simbolo{
+    font-size:28px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.nombre{
+    font-size:10px;
+    margin-top:3px;
+}
+
+/* COLORES */
+
+.alcalino{
+    background:#dc2626;
+}
+
+.alcalinoterreo{
+    background:#ea580c;
+}
+
+.transicion{
+    background:#ca8a04;
+}
+
+.postransicion{
+    background:#16a34a;
+}
+
+.metaloide{
+    background:#0891b2;
+}
+
+.nometal{
+    background:#2563eb;
+}
+
+.halogeno{
+    background:#9333ea;
+}
+
+.gasnoble{
+    background:#db2777;
+}
+
+.lantanido{
+    background:#7c3aed;
+}
+
+.actinido{
+    background:#be123c;
+}
+
+/* LANTÁNIDOS Y ACTÍNIDOS */
+
+.seccion{
+    text-align:center;
+    margin-top:25px;
+}
+
+.seccion h2{
+    color:#93c5fd;
+}
+
+.fila-especial{
+    display:flex;
+    justify-content:center;
+    gap:5px;
+    flex-wrap:wrap;
+    padding:10px 20px 30px;
+}
+
+.fila-especial .elemento{
+    width:70px;
+    height:90px;
+}
+
+/* LEYENDA */
+
+.leyenda{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    padding:25px;
+}
+
+.leyenda span{
+    padding:10px;
+    border-radius:7px;
+    font-size:13px;
+}
+
+/* MODAL */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.8);
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    z-index:100;
+}
+
+.tarjeta{
+    width:500px;
+    max-width:95%;
+    background:#1e293b;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 20px 50px black;
+}
+
+.cerrar{
+    float:right;
+    background:#dc2626;
+    padding:8px 12px;
+}
+
+.simbolo-grande{
+    font-size:70px;
+    color:#60a5fa;
+    font-weight:bold;
+}
+
+.tarjeta h2{
+    font-size:30px;
+}
+
+.informacion{
+    display:grid;
+    gap:8px;
+}
+
+.informacion div{
+    background:#334155;
+    padding:12px;
+    border-radius:7px;
+}
+
+/* PIE */
+
+footer{
+    text-align:center;
+    padding:30px;
+    background:#020617;
+    color:#94a3b8;
+}
+
+/* IMPRESIÓN */
+
+@media print{
+
+    body{
+        background:white;
+        color:black;
+    }
+
+    header{
+        background:white;
+        color:black;
+    }
+
+    .controles,
+    footer,
+    .leyenda{
+        display:none;
+    }
+
+    .elemento{
+        color:black;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>⚗️ Tabla Periódica Interactiva</h1>
+
+<p>
+Proyecto académico de Química aplicado a Ingeniería Industrial
+</p>
+
+<div class="controles">
+
+<input
+type="text"
+id="buscador"
+placeholder="🔎 Buscar elemento, símbolo o número..."
+>
+
+<select id="filtroFamilia">
+
+<option value="">Todas las familias</option>
+
+<option value="Metal alcalino">Metales alcalinos</option>
+
+<option value="Alcalinotérreo">Alcalinotérreos</option>
+
+<option value="Metal de transición">Metales de transición</option>
+
+<option value="Metal postransición">Metales postransición</option>
+
+<option value="Metaloide">Metaloides</option>
+
+<option value="No metal">No metales</option>
+
+<option value="Halógeno">Halógenos</option>
+
+<option value="Gas noble">Gases nobles</option>
+
+<option value="Lantánido">Lantánidos</option>
+
+<option value="Actínido">Actínidos</option>
+
+</select>
+
+<select id="filtroEstado">
+
+<option value="">Todos los estados</option>
+<option value="Sólido">Sólido</option>
+<option value="Líquido">Líquido</option>
+<option value="Gas">Gas</option>
+
+</select>
+
+<button onclick="limpiarFiltros()">
+🔄 Limpiar
+</button>
+
+<button onclick="window.print()">
+🖨️ Guardar PDF
+</button>
+
+</div>
+
+<div id="contador">
+Mostrando 118 de 118 elementos
+</div>
+
+</header>
+
+
+<div class="contenedor-tabla">
+
+<div id="tabla" class="tabla"></div>
+
+</div>
+
+
+<div class="seccion">
+
+<h2>Serie de los Lantánidos</h2>
+
+<div id="lantanidos" class="fila-especial"></div>
+
+</div>
+
+
+<div class="seccion">
+
+<h2>Serie de los Actínidos</h2>
+
+<div id="actinidos" class="fila-especial"></div>
+
+</div>
+
+
+<h2 style="text-align:center;color:#93c5fd;">
+🎨 Clasificación por familias químicas
+</h2>
+
+<div class="leyenda">
+
+<span class="alcalino">Metal alcalino</span>
+
+<span class="alcalinoterreo">Alcalinotérreo</span>
+
+<span class="transicion">Metal de transición</span>
+
+<span class="postransicion">Metal postransición</span>
+
+<span class="metaloide">Metaloide</span>
+
+<span class="nometal">No metal</span>
+
+<span class="halogeno">Halógeno</span>
+
+<span class="gasnoble">Gas noble</span>
+
+<span class="lantanido">Lantánido</span>
+
+<span class="actinido">Actínido</span>
+
+</div>
+
+
+<!-- VENTANA DE INFORMACIÓN -->
+
+<div id="modal" class="modal">
+
+<div class="tarjeta">
+
+<button
+class="cerrar"
+onclick="cerrarModal()">
+✕
+</button>
+
+<div id="modalSimbolo" class="simbolo-grande"></div>
+
+<h2 id="modalNombre"></h2>
+
+<div class="informacion">
+
+<div>
+<b>Número atómico:</b>
+<span id="modalNumero"></span>
+</div>
+
+<div>
+<b>Símbolo:</b>
+<span id="modalSimboloTexto"></span>
+</div>
+
+<div>
+<b>Familia:</b>
+<span id="modalFamilia"></span>
+</div>
+
+<div>
+<b>Estado físico:</b>
+<span id="modalEstado"></span>
+</div>
+
+<div>
+<b>Grupo:</b>
+<span id="modalGrupo"></span>
+</div>
+
+<div>
+<b>Período:</b>
+<span id="modalPeriodo"></span>
+</div>
+
+<div>
+<b>Aplicación industrial:</b>
+<span id="modalUso"></span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+<p>
+Tabla Periódica Interactiva
+</p>
+
+<p>
+Actividad académica | Ingeniería Industrial
+</p>
+
+<p>
+118 elementos químicos
+</p>
+
+</footer>
+
+
+<script>
+
+/*
+=====================================================
+DATOS DE LOS 118 ELEMENTOS
+=====================================================
+*/
+
+const elementos = [
+
+[1,"H","Hidrógeno",1,1,"No metal","Gas","Producción de combustibles y procesos químicos"],
+
+[2,"He","Helio",18,1,"Gas noble","Gas","Criogenia e industria especializada"],
+
+[3,"Li","Litio",1,2,"Metal alcalino","Sólido","Baterías recargables"],
+
+[4,"Be","Berilio",2,2,"Alcalinotérreo","Sólido","Industria aeroespacial"],
+
+[5,"B","Boro",13,2,"Metaloide","Sólido","Vidrios y cerámicas"],
+
+[6,"C","Carbono",14,2,"No metal","Sólido","Acero, combustibles y materiales"],
+
+[7,"N","Nitrógeno",15,2,"No metal","Gas","Fertilizantes e industria alimentaria"],
+
+[8,"O","Oxígeno",16,2,"No metal","Gas","Procesos industriales y medicina"],
+
+[9,"F","Flúor",17,2,"Halógeno","Gas","Industria química"],
+
+[10,"Ne","Neón",18,2,"Gas noble","Gas","Iluminación"],
+
+[11,"Na","Sodio",1,3,"Metal alcalino","Sólido","Industria química"],
+
+[12,"Mg","Magnesio",2,3,"Alcalinotérreo","Sólido","Aleaciones metálicas"],
+
+[13,"Al","Aluminio",13,3,"Metal postransición","Sólido","Transporte, construcción y envases"],
+
+[14,"Si","Silicio",14,3,"Metaloide","Sólido","Microchips y paneles solares"],
+
+[15,"P","Fósforo",15,3,"No metal","Sólido","Fertilizantes"],
+
+[16,"S","Azufre",16,3,"No metal","Sólido","Producción de ácido sulfúrico"],
+
+[17,"Cl","Cloro",17,3,"Halógeno","Gas","Desinfección y producción de PVC"],
+
+[18,"Ar","Argón",18,3,"Gas noble","Gas","Soldadura industrial"],
+
+[19,"K","Potasio",1,4,"Metal alcalino","Sólido","Fertilizantes"],
+
+[20,"Ca","Calcio",2,4,"Alcalinotérreo","Sólido","Cemento y construcción"],
+
+[21,"Sc","Escandio",3,4,"Metal de transición","Sólido","Aleaciones ligeras"],
+
+[22,"Ti","Titanio",4,4,"Metal de transición","Sólido","Industria aeroespacial"],
+
+[23,"V","Vanadio",5,4,"Metal de transición","Sólido","Producción de acero"],
+
+[24,"Cr","Cromo",6,4,"Metal de transición","Sólido","Acero inoxidable"],
+
+[25,"Mn","Manganeso",7,4,"Metal de transición","Sólido","Producción de acero"],
+
+[26,"Fe","Hierro",8,4,"Metal de transición","Sólido","Acero, maquinaria y construcción"],
+
+[27,"Co","Cobalto",9,4,"Metal de transición","Sólido","Baterías y superaleaciones"],
+
+[28,"Ni","Níquel",10,4,"Metal de transición","Sólido","Acero inoxidable y baterías"],
+
+[29,"Cu","Cobre",11,4,"Metal de transición","Sólido","Cables eléctricos y tuberías"],
+
+[30,"Zn","Zinc",12,4,"Metal de transición","Sólido","Galvanizado y aleaciones"],
+
+[31,"Ga","Galio",13,4,"Metal postransición","Sólido","Semiconductores"],
+
+[32,"Ge","Germanio",14,4,"Metaloide","Sólido","Semiconductores y fibra óptica"],
+
+[33,"As","Arsénico",15,4,"Metaloide","Sólido","Semiconductores"],
+
+[34,"Se","Selenio",16,4,"No metal","Sólido","Electrónica y vidrio"],
+
+[35,"Br","Bromo",17,4,"Halógeno","Líquido","Industria química"],
+
+[36,"Kr","Kriptón",18,4,"Gas noble","Gas","Iluminación especializada"],
+
+[37,"Rb","Rubidio",1,5,"Metal alcalino","Sólido","Investigación científica"],
+
+[38,"Sr","Estroncio",2,5,"Alcalinotérreo","Sólido","Materiales y pirotecnia"],
+
+[39,"Y","Itrio",3,5,"Metal de transición","Sólido","Láseres y cerámicas"],
+
+[40,"Zr","Circonio",4,5,"Metal de transición","Sólido","Industria nuclear"],
+
+[41,"Nb","Niobio",5,5,"Metal de transición","Sólido","Superaleaciones"],
+
+[42,"Mo","Molibdeno",6,5,"Metal de transición","Sólido","Aceros y catalizadores"],
+
+[43,"Tc","Tecnecio",7,5,"Metal de transición","Sólido","Medicina nuclear"],
+
+[44,"Ru","Rutenio",8,5,"Metal de transición","Sólido","Catalizadores"],
+
+[45,"Rh","Rodio",9,5,"Metal de transición","Sólido","Catalizadores automotrices"],
+
+[46,"Pd","Paladio",10,5,"Metal de transición","Sólido","Catalizadores"],
+
+[47,"Ag","Plata",11,5,"Metal de transición","Sólido","Electrónica"],
+
+[48,"Cd","Cadmio",12,5,"Metal de transición","Sólido","Baterías"],
+
+[49,"In","Indio",13,5,"Metal postransición","Sólido","Pantallas electrónicas"],
+
+[50,"Sn","Estaño",14,5,"Metal postransición","Sólido","Soldaduras"],
+
+[51,"Sb","Antimonio",15,5,"Metaloide","Sólido","Aleaciones"],
+
+[52,"Te","Telurio",16,5,"Metaloide","Sólido","Semiconductores"],
+
+[53,"I","Yodo",17,5,"Halógeno","Sólido","Industria farmacéutica"],
+
+[54,"Xe","Xenón",18,5,"Gas noble","Gas","Lámparas especializadas"],
+
+[55,"Cs","Cesio",1,6,"Metal alcalino","Sólido","Relojes atómicos"],
+
+[56,"Ba","Bario",2,6,"Alcalinotérreo","Sólido","Cerámicas y diagnóstico"],
+
+[57,"La","Lantano",3,6,"Lantánido","Sólido","Óptica y catalizadores"],
+
+[58,"Ce","Cerio",4,6,"Lantánido","Sólido","Catalizadores"],
+
+[59,"Pr","Praseodimio",5,6,"Lantánido","Sólido","Imanes"],
+
+[60,"Nd","Neodimio",6,6,"Lantánido","Sólido","Imanes permanentes"],
+
+[61,"Pm","Prometio",7,6,"Lantánido","Sólido","Investigación"],
+
+[62,"Sm","Samario",8,6,"Lantánido","Sólido","Imanes"],
+
+[63,"Eu","Europio",9,6,"Lantánido","Sólido","Pantallas"],
+
+[64,"Gd","Gadolinio",10,6,"Lantánido","Sólido","Materiales magnéticos"],
+
+[65,"Tb","Terbio",11,6,"Lantánido","Sólido","Electrónica"],
+
+[66,"Dy","Disprosio",12,6,"Lantánido","Sólido","Imanes"],
+
+[67,"Ho","Holmio",13,6,"Lantánido","Sólido","Láseres"],
+
+[68,"Er","Erbio",14,6,"Lantánido","Sólido","Fibra óptica"],
+
+[69,"Tm","Tulio",15,6,"Lantánido","Sólido","Láseres"],
+
+[70,"Yb","Iterbio",16,6,"Lantánido","Sólido","Láseres"],
+
+[71,"Lu","Lutecio",17,6,"Lantánido","Sólido","Detectores"],
+
+[72,"Hf","Hafnio",4,6,"Metal de transición","Sólido","Industria nuclear"],
+
+[73,"Ta","Tantalio",5,6,"Metal de transición","Sólido","Electrónica"],
+
+[74,"W","Wolframio",6,6,"Metal de transición","Sólido","Herramientas industriales"],
+
+[75,"Re","Renio",7,6,"Metal de transición","Sólido","Turbinas y superaleaciones"],
+
+[76,"Os","Osmio",8,6,"Metal de transición","Sólido","Aleaciones especiales"],
+
+[77,"Ir","Iridio",9,6,"Metal de transición","Sólido","Equipos especializados"],
+
+[78,"Pt","Platino",10,6,"Metal de transición","Sólido","Catalizadores"],
+
+[79,"Au","Oro",11,6,"Metal de transición","Sólido","Electrónica"],
+
+[80,"Hg","Mercurio",12,6,"Metal de transición","Líquido","Instrumentación especializada"],
+
+[81,"Tl","Talio",13,6,"Metal postransición","Sólido","Electrónica"],
+
+[82,"Pb","Plomo",14,6,"Metal postransición","Sólido","Baterías"],
+
+[83,"Bi","Bismuto",15,6,"Metal postransición","Sólido","Aleaciones"],
+
+[84,"Po","Polonio",16,6,"Metal postransición","Sólido","Investigación"],
+
+[85,"At","Astato",17,6,"Halógeno","Sólido","Investigación médica"],
+
+[86,"Rn","Radón",18,6,"Gas noble","Gas","Investigación científica"],
+
+[87,"Fr","Francio",1,7,"Metal alcalino","Sólido","Investigación"],
+
+[88,"Ra","Radio",2,7,"Alcalinotérreo","Sólido","Investigación"],
+
+[89,"Ac","Actinio",3,7,"Actínido","Sólido","Investigación nuclear"],
+
+[90,"Th","Torio",4,7,"Actínido","Sólido","Energía nuclear"],
+
+[91,"Pa","Protactinio",5,7,"Actínido","Sólido","Investigación nuclear"],
+
+[92,"U","Uranio",6,7,"Actínido","Sólido","Energía nuclear"],
+
+[93,"Np","Neptunio",7,7,"Actínido","Sólido","Investigación nuclear"],
+
+[94,"Pu","Plutonio",8,7,"Actínido","Sólido","Energía nuclear"],
+
+[95,"Am","Americio",9,7,"Actínido","Sólido","Detectores de humo"],
+
+[96,"Cm","Curio",10,7,"Actínido","Sólido","Investigación científica"],
+
+[97,"Bk","Berkelio",11,7,"Actínido","Sólido","Investigación científica"],
+
+[98,"Cf","Californio",12,7,"Actínido","Sólido","Fuentes de neutrones"],
+
+[99,"Es","Einsteinio",13,7,"Actínido","Sólido","Investigación científica"],
+
+[100,"Fm","Fermio",14,7,"Actínido","Sólido","Investigación científica"],
+
+[101,"Md","Mendelevio",15,7,"Actínido","Sólido","Investigación científica"],
+
+[102,"No","Nobelio",16,7,"Actínido","Sólido","Investigación científica"],
+
+[103,"Lr","Lawrencio",17,7,"Actínido","Sólido","Investigación científica"],
+
+[104,"Rf","Rutherfordio",4,7,"Metal de transición","Sólido","Investigación científica"],
+
+[105,"Db","Dubnio",5,7,"Metal de transición","Sólido","Investigación científica"],
+
+[106,"Sg","Seaborgio",6,7,"Metal de transición","Sólido","Investigación científica"],
+
+[107,"Bh","Bohrio",7,7,"Metal de transición","Sólido","Investigación científica"],
+
+[108,"Hs","Hassio",8,7,"Metal de transición","Sólido","Investigación científica"],
+
+[109,"Mt","Meitnerio",9,7,"Metal de transición","Sólido","Investigación científica"],
+
+[110,"Ds","Darmstadtio",10,7,"Metal de transición","Sólido","Investigación científica"],
+
+[111,"Rg","Roentgenio",11,7,"Metal de transición","Sólido","Investigación científica"],
+
+[112,"Cn","Copernicio",12,7,"Metal de transición","Sólido","Investigación científica"],
+
+[113,"Nh","Nihonio",13,7,"Metal postransición","Sólido","Investigación científica"],
+
+[114,"Fl","Flerovio",14,7,"Metal postransición","Sólido","Investigación científica"],
+
+[115,"Mc","Moscovio",15,7,"Metal postransición","Sólido","Investigación científica"],
+
+[116,"Lv","Livermorio",16,7,"Metal postransición","Sólido","Investigación científica"],
+
+[117,"Ts","Teneso",17,7,"Halógeno","Sólido","Investigación científica"],
+
+[118,"Og","Oganesón",18,7,"Gas noble","Gas","Investigación científica"]
+
+];
+
+
+/*
+=====================================================
+CLASES DE COLORES
+=====================================================
+*/
+
+const clases = {
+
+"Metal alcalino":"alcalino",
+
+"Alcalinotérreo":"alcalinoterreo",
+
+"Metal de transición":"transicion",
+
+"Metal postransición":"postransicion",
+
+"Metaloide":"metaloide",
+
+"No metal":"nometal",
+
+"Halógeno":"halogeno",
+
+"Gas noble":"gasnoble",
+
+"Lantánido":"lantanido",
+
+"Actínido":"actinido"
+
+};
+
+
+/*
+=====================================================
+CREAR ELEMENTO
+=====================================================
+*/
+
+function crearElemento(e){
+
+    const div=document.createElement("div");
+
+    const numero=e[0];
+
+    const simbolo=e[1];
+
+    const nombre=e[2];
+
+    const grupo=e[3];
+
+    const periodo=e[4];
+
+    const familia=e[5];
+
+    const estado=e[6];
+
+    const uso=e[7];
+
+    div.className="elemento "+clases[familia];
+
+    /*
+    Posición en la tabla
+    */
+
+    div.style.gridColumn=grupo;
+
+    div.style.gridRow=periodo;
+
+    div.innerHTML=`
+
+        <div class="numero">
+        ${numero}
+        </div>
+
+        <div class="simbolo">
+        ${simbolo}
+        </div>
+
+        <div class="nombre">
+        ${nombre}
+        </div>
+
+    `;
+
+    div.onclick=function(){
+
+        abrirModal(e);
+
+    };
+
+    return div;
+
+}
+
+
+/*
+=====================================================
+CARGAR TABLA
+=====================================================
+*/
+
+function cargarTabla(lista=elementos){
+
+    const tabla=document.getElementById("tabla");
+
+    const lantanidos=document.getElementById("lantanidos");
+
+    const actinidos=document.getElementById("actinidos");
+
+    tabla.innerHTML="";
+
+    lantanidos.innerHTML="";
+
+    actinidos.innerHTML="";
+
+    if(lista.length===0){
+
+        tabla.innerHTML='<div class="sin-resultados">No se encontraron elementos con esos filtros.</div>';
+
+        document.getElementById("contador").textContent="Mostrando 0 de 118 elementos";
+
+        return;
+
+    }
+
+    let cantidad=0;
+
+    lista.forEach(e=>{
+
+        cantidad++;
+
+        const numero=e[0];
+
+        /*
+        LANTÁNIDOS
+        */
+
+        if(numero>=58 && numero<=71){
+
+            const div=crearElemento(e);
+
+            lantanidos.appendChild(div);
+
+        }
+
+        /*
+        ACTÍNIDOS
+        */
+
+        else if(numero>=90 && numero<=103){
+
+            const div=crearElemento(e);
+
+            actinidos.appendChild(div);
+
+        }
+
+        /*
+        TABLA PRINCIPAL
+        */
+
+        else{
+
+            tabla.appendChild(
+                crearElemento(e)
+            );
+
+        }
+
+    });
+
+    document.getElementById("contador").textContent=
+        "Mostrando "+cantidad+" de 118 elementos";
+
+}
+
+
+/*
+=====================================================
+MODAL
+=====================================================
+*/
+
+function abrirModal(e){
+
+    document.getElementById("modal").style.display="flex";
+
+    document.getElementById("modalSimbolo").textContent=e[1];
+
+    document.getElementById("modalNombre").textContent=e[2];
+
+    document.getElementById("modalNumero").textContent=e[0];
+
+    document.getElementById("modalSimboloTexto").textContent=e[1];
+
+    document.getElementById("modalFamilia").textContent=e[5];
+
+    document.getElementById("modalEstado").textContent=e[6];
+
+    document.getElementById("modalGrupo").textContent=e[3];
+
+    document.getElementById("modalPeriodo").textContent=e[4];
+
+    document.getElementById("modalUso").textContent=e[7];
+
+}
+
+
+function cerrarModal(){
+
+    document.getElementById("modal").style.display="none";
+
+}
+
+
+document.getElementById("modal").addEventListener("click", function(event){
+
+    if(event.target===this){
+
+        cerrarModal();
+
+    }
+
+});
+
+
+/*
+=====================================================
+BUSCADOR
+=====================================================
+*/
+
+function filtrar(){
+
+    const texto=document
+        .getElementById("buscador")
+        .value
+        .toLowerCase();
+
+    const familia=document
+        .getElementById("filtroFamilia")
+        .value;
+
+    const estado=document
+        .getElementById("filtroEstado")
+        .value;
+
+
+    const resultado=elementos.filter(e=>{
+
+        const numero=String(e[0]);
+
+        const simbolo=e[1].toLowerCase();
+
+        const nombre=e[2].toLowerCase();
+
+        const coincideTexto=
+
+            numero.includes(texto) ||
+
+            simbolo.includes(texto) ||
+
+            nombre.includes(texto);
+
+        const coincideFamilia=
+
+            familia==="" ||
+
+            e[5]===familia;
+
+        const coincideEstado=
+
+            estado==="" ||
+
+            e[6]===estado;
+
+
+        return coincideTexto &&
+               coincideFamilia &&
+               coincideEstado;
+
+    });
+
+
+    cargarTabla(resultado);
+
+}
+
+
+document
+.getElementById("buscador")
+.addEventListener("input",filtrar);
+
+
+document
+.getElementById("filtroFamilia")
+.addEventListener("change",filtrar);
+
+
+document
+.getElementById("filtroEstado")
+.addEventListener("change",filtrar);
+
+
+/*
+=====================================================
+LIMPIAR
+=====================================================
+*/
+
+function limpiarFiltros(){
+
+    document.getElementById("buscador").value="";
+
+    document.getElementById("filtroFamilia").value="";
+
+    document.getElementById("filtroEstado").value="";
+
+    cargarTabla();
+
+}
+
+
+/*
+=====================================================
+CERRAR MODAL CON ESC
+=====================================================
+*/
+
+document.addEventListener(
+"keydown",
+function(event){
+
+    if(event.key==="Escape"){
+
+        cerrarModal();
+
+    }
+
+});
+
+
+/*
+=====================================================
+INICIAR
+=====================================================
+*/
+
+cargarTabla();
+
+
+/*
+=====================================================
+VERIFICACIÓN DE LOS 118 ELEMENTOS
+=====================================================
+*/
+
+console.log(
+"Tabla periódica cargada correctamente."
+);
+
+console.log(
+"Cantidad de elementos:",
+elementos.length
+);
+
+</script>
+
+</body>
+</html>
